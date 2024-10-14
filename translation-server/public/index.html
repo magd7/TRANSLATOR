@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مترجم بسيط</title>
+</head>
+<body>
+    <h1>موقع ترجمة بسيط</h1>
+    <form id="translateForm">
+        <textarea id="text" placeholder="اكتب النص هنا" rows="4" cols="50"></textarea><br>
+        <input type="text" id="targetLanguage" placeholder="اللغة المستهدفة (مثلاً: ar, en, fr)">
+        <button type="submit">ترجمة</button>
+    </form>
+    <h3>النص المترجم:</h3>
+    <p id="result"></p>
+
+    <script>
+        const form = document.getElementById('translateForm');
+        const result = document.getElementById('result');
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const text = document.getElementById('text').value;
+            const targetLanguage = document.getElementById('targetLanguage').value;
+
+            const response = await fetch('/translate', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ text, targetLanguage })
+            });
+            const data = await response.json();
+            
+            result.textContent = data.translatedText || 'حدث خطأ في الترجمة';
+        });
+    </script>
+</body>
+</html>
